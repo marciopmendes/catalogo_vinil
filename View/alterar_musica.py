@@ -4,12 +4,12 @@ from tkinter import ttk
 class altera_musicaVw:
     
     def __init__(self):
-        pass
+        self.alterarMusica()
     
     def alterarMusica(self):
         alterar_window = tk.Toplevel()
         alterar_window.title("Alterar Música")
-        alterar_window.geometry("230x150")
+        alterar_window.geometry("255x350")
         
         #Criação do formulário de alteração
         musica_label = ttk.Label(master=alterar_window, text='Nome da Música')

@@ -4,12 +4,12 @@ from tkinter import ttk
 class excluir_musicaVw:
     
     def __init__(self):
-        pass
+        self.excluirMusica()
     
     def excluirMusica(self):
         excluir_window = tk.Toplevel()
         excluir_window.title("Excluir Músicas")
-        excluir_window.geometry("230x150")
+        excluir_window.geometry("255x350")
         
         #Criação do formulário de exclusão
         musica_label = ttk.Label(master=excluir_window, text='Nome da Música')

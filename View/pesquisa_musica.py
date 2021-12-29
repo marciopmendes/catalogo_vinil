@@ -3,12 +3,12 @@ from tkinter import ttk
 
 class pesquisa_musicaVw:
     def __init__(self):
-        pass
+        self.pesquisaMusica()
     
     def pesquisaMusica(self):
         pesquisar_window = tk.Toplevel()
         pesquisar_window.title("Pesquisar Músicas")
-        pesquisar_window.geometry("230x150")
+        pesquisar_window.geometry("255x350")
         
         pesquisar_label = ttk.Label(master=pesquisar_window, text='Pesquisar Por:')
         pesquisar_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)

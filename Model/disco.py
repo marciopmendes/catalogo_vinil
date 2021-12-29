@@ -2,7 +2,7 @@ class Disco():
 
     def __init__(self, titulo, artista, genero, ano, gravadora, musicas=None, numero_disco, qualidade, estado_capa, estado_midia):
         self.titulo = titulo
-        self.artista = artista
+        self.artista = artista #não vai ser um atributo, vai ser um objeto Artista
         self.genero = genero
         self.ano = ano
         self.gravadora = gravadora

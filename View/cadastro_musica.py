@@ -5,12 +5,12 @@ from tkinter import ttk
 class cadastro_musicaVw:
     
     def __init__(self):
-        pass
+        self.cadastroMusica()
     
     def cadastroMusica(self):
         cadastro_musica_window = tk.Toplevel()
         cadastro_musica_window.title("Cadastro de Músicas")
-        cadastro_musica_window.geometry("230x150")
+        cadastro_musica_window.geometry("255x360")
         
         lista_musicas = list()
         

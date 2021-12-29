@@ -2,7 +2,7 @@ class Musica():
 
     def __init__(self, nome, interprete, compositor, genero, lado_disco):
         self.nome = nome
-        self.interprete = interprete
+        self.interprete = interprete #o interprete vai ser um objeto Artista
         self.compositor = compositor
         self.genero = genero
         self.lado_disco = lado_disco

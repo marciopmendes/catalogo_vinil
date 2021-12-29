@@ -9,7 +9,7 @@ class pesquisa_discoVw:
     def pesquisaDisco(self):
         pesquisar_window = tk.Toplevel()
         pesquisar_window.title("Pesquisar Discos")
-        pesquisar_window.geometry("230x150")
+        pesquisar_window.geometry("255x320")
         
         pesquisar_label = ttk.Label(master=pesquisar_window, text='Pesquisar Por:')
         pesquisar_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -26,3 +26,14 @@ class pesquisa_discoVw:
         
         pesquisar_button = tk.Button(master=pesquisar_window, text="Pesquisar", width=30, height=1)
         pesquisar_button.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
+        """Esse botão pesquisar vai executar a query por artista ou titulo, conforme a escolha do radio button"""
+        
+        lista = tk.Listbox(master=pesquisar_window, selectmode="single", bg="#a7f5a4", width=40)#listvariable=LISTA_SQL
+        lista.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
+        
+        """for item in query:
+               lista.insert(END,item)"""
+    
+    #PESQUISAR TODAS AS MUSICAS DO CANTOR X
+    #PESQUISAR TODAS AS MUSICAS CUJO NOME SEJA Y, MOSTRAR NOME E INTREPRETE NUMA LISTA. A QUE FOR SELECIONADA NESSA LISTA ABRE TODAS AS INFORMAÇÕES
+    #EM UM POPUP

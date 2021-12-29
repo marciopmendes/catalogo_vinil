@@ -4,12 +4,12 @@ from tkinter import ttk
 class excluir_discoVw:
     
     def __init__(self):
-        pass
+        self.excluirDisco()
     
     def excluirDisco(self):
         excluir_window = tk.Toplevel()
         excluir_window.title("Excluir Discos")
-        excluir_window.geometry("230x150")
+        excluir_window.geometry("255x320")
         
         #Criação do formulário de exclusão
         artista_label = ttk.Label(master=excluir_window, text='Nome do Artista')
