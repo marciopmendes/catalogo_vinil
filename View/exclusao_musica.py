@@ -1,23 +1,23 @@
 import tkinter as tk
 from tkinter import ttk
 
-class excluir_discoVw:
+class excluir_musicaVw:
     
     def __init__(self):
         pass
     
-    def excluirDisco(self):
+    def excluirMusica(self):
         excluir_window = tk.Toplevel()
-        excluir_window.title("Excluir Discos")
+        excluir_window.title("Excluir Músicas")
         excluir_window.geometry("230x150")
         
         #Criação do formulário de exclusão
-        artista_label = ttk.Label(master=excluir_window, text='Nome do Artista')
-        artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
+        musica_label = ttk.Label(master=excluir_window, text='Nome da Música')
+        musica_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
         
-        artista = tk.StringVar()
-        artista_entry = ttk.Entry(master=excluir_window, textvariable=artista)
-        artista_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=3)
+        musica = tk.StringVar()
+        musica_entry = ttk.Entry(master=excluir_window, textvariable=musica)
+        musica_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=3)
         
         buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1)
         buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
