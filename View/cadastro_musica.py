@@ -24,10 +24,10 @@ class cadastro_musicaVw:
         
         interprete_label = ttk.Label(master=cadastro_musica_window, text='Intérprete')
         interprete_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
-        
-        interprete = tk.StringVar()
-        interprete_entry = ttk.Entry(master=cadastro_musica_window, textvariable=interprete)
-        interprete_entry.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
+        """o campo abaixo vai ser uma ttk.combobox para escolher dentre os artistas cadastrados"""
+        interprete = "QUERY"  """ESSA VARIAVEL RECEBE A QUERY SELECT * FROM ARTISTAS_TBL"""
+        interprete_combo = ttk.Combobox(master=cadastro_musica_window, values=interprete)
+        interprete_combo.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
         
         compositor_label = ttk.Label(master=cadastro_musica_window, text='Compositor')
         compositor_label.grid(row=3, column=0, padx=4, pady=4, columnspan=1)

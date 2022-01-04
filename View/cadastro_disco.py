@@ -21,10 +21,10 @@ class cadastro_discoVw:
         
         artista_label = ttk.Label(master=cadastro_disco_window, text='Artista')
         artista_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
-        
-        artista = tk.StringVar()
-        artista_entry = ttk.Entry(master=cadastro_disco_window, textvariable=artista)
-        artista_entry.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
+        """o campo abaixo vai ser uma ttk.combobox para escolher dentre os artistas cadastrados"""
+        artista = "QUERY"       """"ESSA VARIÁVEL RECEBE A QUERY SELECT * FROM ARTISTAS_TBL"""
+        artista_combo = ttk.Combobox(master=cadastro_disco_window, values=artista)
+        artista_combo.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
         
         genero_label = ttk.Label(master=cadastro_disco_window, text='Gênero')
         genero_label.grid(row=3, column=0, padx=4, pady=4, columnspan=1)
@@ -73,5 +73,5 @@ class cadastro_discoVw:
         estado_midia_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"])
         estado_midia_combo.grid(row=9, column=1, padx=4, pady=4, columnspan=3)
         
-        salvar_button = tk.Button(master=cadastro_disco_window, text="Salvar", width=30, height=1)
+        salvar_button = tk.Button(master=cadastro_disco_window, text="Salvar", width=40, height=1)
         salvar_button.grid(row=10, column=0, padx=4, pady=4, columnspan=3)
