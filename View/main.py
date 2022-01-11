@@ -1,20 +1,17 @@
 import tkinter as tk
-from View.cadastro_disco import cadastro_discoVw
-from View.pesquisa_disco import pesquisa_discoVw
-from View.alterar_disco import alterar_discoVw
-from View.exclusao_disco import excluir_discoVw
-from View.cadastro_musica import cadastro_musicaVw
-from View.pesquisa_musica import pesquisa_musicaVw
-from View.alterar_musica import altera_musicaVw
-from View.exclusao_musica import excluir_musicaVw
-from View.cadastro_artista import cadastro_artistaVw
-from View.pesquisa_artista import pesquisa_artistaVw
-from View.alterar_artista import alterar_artistaVw
-from View.exclusao_artista import excluir_artistaVw
+from View.view_disco import discoVw
+from View.view_musica import musicaVw
+from View.view_artista import artistaVw
+from Controller.controller_db import dbController
+
 
 class mainVw:
     
     def __init__(self):
+        self.controller = dbController()#ao iniciar o programa, ele ja faz a conexão no banco
+        self.view_artista = artistaVw()
+        self.view_disco = discoVw()
+        self.view_musica = musicaVw()
         self.main_window = tk.Tk()
         self.main_window.title("Catálogo de Discos")
         self.main_window.geometry("230x450")
@@ -34,51 +31,51 @@ class mainVw:
 
 #Criação dos botões na tela principal
     def cadastrarArtistaButton(self):
-        cadastrar_artista_button = tk.Button(master=self.main_window, text="Cadastrar Novo Artista", width=30, height=1, command=cadastro_artistaVw)
+        cadastrar_artista_button = tk.Button(master=self.main_window, text="Cadastrar Novo Artista", width=30, height=1, command=self.view_artista.cadastroArtista)
         cadastrar_artista_button.grid(row=1, column=0, padx=4, pady=4)
     
     def pesquisarArtistaButton(self):
-        pesquisar_disco_button = tk.Button(master=self.main_window, text="Pesquisar Artista", width=30, height=1, command=pesquisa_artistaVw)
+        pesquisar_disco_button = tk.Button(master=self.main_window, text="Pesquisar Artista", width=30, height=1, command=self.view_artista.pesquisaArtista)
         pesquisar_disco_button.grid(row=2, column=0, padx=4, pady=4)
         
     def alterarArtistaButton(self):
-        alterar_artista_button = tk.Button(master=self.main_window, text="Alterar Cadastro do Artista", width=30, height=1, command=alterar_artistaVw)
+        alterar_artista_button = tk.Button(master=self.main_window, text="Alterar Cadastro do Artista", width=30, height=1, command=self.view_artista.alterarArtista)
         alterar_artista_button.grid(row=3, column=0, padx=4, pady=4)
     
     def excluirArtistaButton(self):
-        excluir_artista_button = tk.Button(master=self.main_window, text="Excluir Artista", width=30, height=1, command=excluir_artistaVw)
+        excluir_artista_button = tk.Button(master=self.main_window, text="Excluir Artista", width=30, height=1, command=self.view_artista.excluirArtista)
         excluir_artista_button.grid(row=4, column=0, padx=4, pady=4, columnspan=3)
     
     def cadastrarDiscoButton(self):
-        cadastrar_disco_button = tk.Button(master=self.main_window, text="Cadastrar Novo Disco", width=30, height=1, command=cadastro_discoVw)
+        cadastrar_disco_button = tk.Button(master=self.main_window, text="Cadastrar Novo Disco", width=30, height=1, command=self.view_disco.cadastroDisco)
         cadastrar_disco_button.grid(row=5, column=0, padx=4, pady=4)
     
     def pesquisarDiscoButton(self):
-        pesquisar_disco_button = tk.Button(master=self.main_window, text="Pesquisar Disco", width=30, height=1, command=pesquisa_discoVw)
+        pesquisar_disco_button = tk.Button(master=self.main_window, text="Pesquisar Disco", width=30, height=1, command=self.view_disco.pesquisaDisco)
         pesquisar_disco_button.grid(row=6, column=0, padx=4, pady=4)
         
     def alterarDiscoButton(self):
-        alterar_disco_button = tk.Button(master=self.main_window, text="Alterar Cadastro do Disco", width=30, height=1, command=alterar_discoVw)
+        alterar_disco_button = tk.Button(master=self.main_window, text="Alterar Cadastro do Disco", width=30, height=1, command=self.view_disco.alterarDisco)
         alterar_disco_button.grid(row=7, column=0, padx=4, pady=4)
     
     def excluirDiscoButton(self):
-        excluir_disco_button = tk.Button(master=self.main_window, text="Excluir Disco", width=30, height=1, command=excluir_discoVw)
+        excluir_disco_button = tk.Button(master=self.main_window, text="Excluir Disco", width=30, height=1, command=self.view_disco.excluirDisco)
         excluir_disco_button.grid(row=8, column=0, padx=4, pady=4, columnspan=3)
         
     def cadastrarMusicaButton(self):
-        cadastrar_musica_button = tk.Button(master=self.main_window, text="Cadastrar Músicas", width=30, height=1, command=cadastro_musicaVw)
+        cadastrar_musica_button = tk.Button(master=self.main_window, text="Cadastrar Músicas", width=30, height=1, command=self.view_musica.cadastroMusica)
         cadastrar_musica_button.grid(row=9, column=0, padx=4, pady=4, columnspan=3)
         
     def pesquisarMusicaButton(self):
-        pesquisar_musica_button = tk.Button(master=self.main_window, text="Pesquisar Música", width=30, height=1, command=pesquisa_musicaVw)
+        pesquisar_musica_button = tk.Button(master=self.main_window, text="Pesquisar Música", width=30, height=1, command=self.view_musica.pesquisaMusica)
         pesquisar_musica_button.grid(row=10, column=0, padx=4, pady=4)
         
     def alterarMusicaButton(self):
-        alterar_musica_button = tk.Button(master=self.main_window, text="Alterar Cadastro da Música", width=30, height=1, command=altera_musicaVw)
+        alterar_musica_button = tk.Button(master=self.main_window, text="Alterar Cadastro da Música", width=30, height=1, command=self.view_musica.alterarMusica)
         alterar_musica_button.grid(row=11, column=0, padx=4, pady=4)
     
     def excluirMusicaButton(self):
-        excluir_musica_button = tk.Button(master=self.main_window, text="Excluir Música", width=30, height=1, command=excluir_musicaVw)
+        excluir_musica_button = tk.Button(master=self.main_window, text="Excluir Música", width=30, height=1, command=self.view_musica.excluirMusica)
         excluir_musica_button.grid(row=12, column=0, padx=4, pady=4, columnspan=3)
     
     def sairButton(self):
