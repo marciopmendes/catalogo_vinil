@@ -12,6 +12,10 @@ class artistaVw:
         cadastro_artista_window.title("Cadastro de Artistas")
         cadastro_artista_window.geometry("250x70")
         
+        def saveArtista(nome):
+            self.controller_artista.ctCadastrarArtista(nome)
+            artista_entry.delete(0, 'end')
+        
         artista_label = ttk.Label(master=cadastro_artista_window, text='Nome do Artista')
         artista_label.grid(row=1, column=0, padx=4, pady=4)
         
@@ -19,13 +23,13 @@ class artistaVw:
         artista_entry = ttk.Entry(master=cadastro_artista_window, textvariable=artista)
         artista_entry.grid(row=1, column=1, padx=4, pady=4)
         
-        salvar_button = tk.Button(master=cadastro_artista_window, text="Salvar", width=33, height=1, command=lambda:self.controller_artista.ctCadastrarArtista(artista.get()))
+        salvar_button = tk.Button(master=cadastro_artista_window, text="Salvar", width=33, height=1, command=lambda:saveArtista(artista.get()))
         salvar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=2)
         
     def alterarArtista(self):
         alterar_window = tk.Toplevel()
         alterar_window.title("Alterar Artista")
-        alterar_window.geometry("255x350")
+        alterar_window.geometry("255x280")
         
         artista_label = ttk.Label(master=alterar_window, text='Nome do Artista')
         artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -54,7 +58,7 @@ class artistaVw:
             print(id_artista)
             artista_window = tk.Toplevel()
             artista_window.title("Informações do Artista")
-            artista_window.geometry("230x150")
+            artista_window.geometry("230x80")
             
             artista_label = ttk.Label(master=artista_window, text='Artista')
             artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -72,7 +76,7 @@ class artistaVw:
     def pesquisaArtista(self):
         pesquisar_window = tk.Toplevel()
         pesquisar_window.title("Pesquisar Artistas")
-        pesquisar_window.geometry("255x320")
+        pesquisar_window.geometry("255x250")
         
         pesquisar_label = ttk.Label(master=pesquisar_window, text='Nome do Artista:')
         pesquisar_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -89,6 +93,7 @@ class artistaVw:
             query = self.controller_artista.ctBuscarArtista(nome)
             for artista in query:
                 lista.insert('end', artista)
+            artista_entry.delete(0, 'end')
                 
         pesquisar_button = tk.Button(master=pesquisar_window, text="Pesquisar", width=30, height=1, command=lambda:alimentaLista(artista.get()))
         pesquisar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)  
@@ -127,4 +132,3 @@ class artistaVw:
           
         excluir_button = tk.Button(master=excluir_window, text="Excluir Artistas Selecionados", width=30, height=1, command=lambda:self.controller_artista.ctExcluirArtistas(getIdsToDelete()))
         excluir_button.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
-  
