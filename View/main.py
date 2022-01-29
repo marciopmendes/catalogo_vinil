@@ -1,3 +1,5 @@
+import sys
+sys.path.append("./")
 import tkinter as tk
 from View.view_disco import discoVw
 from View.view_musica import musicaVw

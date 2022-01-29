@@ -1,3 +1,6 @@
+import sys
+from tkinter.constants import ANCHOR
+sys.path.append("./")
 import tkinter as tk
 from tkinter import ttk
 from Controller.controller_disco import discoCt
@@ -21,9 +24,9 @@ class discoVw:
         
         artista_label = ttk.Label(master=cadastro_disco_window, text='Artista')
         artista_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
-        """o campo abaixo vai ser uma ttk.combobox para escolher dentre os artistas cadastrados"""
-        artista = "QUERY"       """"ESSA VARIÁVEL RECEBE A QUERY SELECT * FROM ARTISTAS_TBL"""
-        artista_combo = ttk.Combobox(master=cadastro_disco_window, values=artista)
+        lista_artistas = self.controller_disco.listaArtistas()
+        artista = tk.StringVar()
+        artista_combo = ttk.Combobox(master=cadastro_disco_window, values=lista_artistas, textvariable=artista)
         artista_combo.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
         
         genero_label = ttk.Label(master=cadastro_disco_window, text='Gênero')
@@ -65,15 +68,26 @@ class discoVw:
         
         estado_capa_label = ttk.Label(master=cadastro_disco_window, text="Estado da Capa")
         estado_capa_label.grid(row=8, column=0, padx=4, pady=4, columnspan=1)
-        estado_capa_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"])
+        estado_capa = tk.StringVar()
+        estado_capa_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
+                                        textvariable=estado_capa)
         estado_capa_combo.grid(row=8, column=1, padx=4, pady=4, columnspan=3)
         
         estado_midia_label = ttk.Label(master=cadastro_disco_window, text="Estado da Mídia")
         estado_midia_label.grid(row=9, column=0, padx=4, pady=4, columnspan=1)
-        estado_midia_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"])
+        estado_midia = tk.StringVar()
+        estado_midia_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
+                                         textvariable=estado_midia)
         estado_midia_combo.grid(row=9, column=1, padx=4, pady=4, columnspan=3)
+
+        def saveDisco(_titulo, _artista, _genero, _ano, _gravadora, _numero, _qualidade, _capa, _midia):
+            id_artista = self.controller_disco.getArtistaById(_artista)
+            self.controller_disco.ctCadastrarDisco(_titulo, id_artista, _genero, _ano, _gravadora, _numero, _qualidade, _capa, _midia)
+            cadastro_disco_window.destroy()
         
-        salvar_button = tk.Button(master=cadastro_disco_window, text="Salvar", width=40, height=1)
+        salvar_button = tk.Button(master=cadastro_disco_window, text="Salvar", width=40, height=1,
+                                 command=lambda:saveDisco(titulo.get(), artista.get(), genero.get(), ano.get(), gravadora.get(), numero.get(),
+                                                         qualidade.get(), estado_capa.get(), estado_midia.get()))
         salvar_button.grid(row=10, column=0, padx=4, pady=4, columnspan=3)
         
     def alterarDisco(self):
@@ -82,25 +96,33 @@ class discoVw:
         alterar_window.geometry("255x350")
         
         #Criação do formulário de alteração
-        artista_label = ttk.Label(master=alterar_window, text='Nome do Artista')
-        artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
+        pesquisa_label = ttk.Label(master=alterar_window, text='Buscar por: ')
+        pesquisa_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
+
+        pesquisa = tk.StringVar()
+        pesquisa_entry = ttk.Entry(master=alterar_window, textvariable=pesquisa)
+        pesquisa_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=2)
+
+        criterio = tk.StringVar()
+        artistaRb = ttk.Radiobutton(master=alterar_window, text="Artista", variable=criterio, value="Artista")
+        artistaRb.grid(row=1, column=3, columnspan=1)
+        discoRb = ttk.Radiobutton(master=alterar_window, text="Disco", variable=criterio, value="Disco")
+        discoRb.grid(row=1, column=3, columnspan=1)
+
+        lista_discos = tk.Listbox(master=alterar_window, selectmode="single", bg="#a7f5a4", width=40)
+        lista_discos.grid(row=3, column=0, padx=4, pady=4, columnspan=5)
         
-        artista = tk.StringVar()
-        artista_entry = ttk.Entry(master=alterar_window, textvariable=artista)
-        artista_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=3)
-        
-        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1)
+        def alimentaLista(criterio, pesquisa):
+            lista_discos.delete(0, 'end')
+            if criterio == "Disco":
+                query = self.controller_disco.ctBuscarPorTitulo(pesquisa)
+            else:
+                query = self.controller_disco.ctBuscarPorArtista(pesquisa)
+            for disco in query:
+                lista_discos.insert('end', disco)
+
+        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(criterio.get(), pesquisa.get()))
         buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
-        
-        """O botão de buscar vai executar uma query. O resultado dessa query será usado para alimentar a listbox"""
-        
-        lista = tk.Listbox(master=alterar_window, selectmode="single", bg="#a7f5a4", width=40)#listvariable=LISTA_SQL
-        lista.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
-        
-        """for item in query:
-               lista.insert(END,item)
-               
-            Os itens selecionados vão popular algo tipo uma lista que vai alimentar a query de alterar"""
         
         alterar_button = tk.Button(master=alterar_window, text="Alterar Disco Selecionado", width=30, height=1)
         alterar_button.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
@@ -179,30 +201,36 @@ class discoVw:
     def pesquisaDisco(self):
         pesquisar_window = tk.Toplevel()
         pesquisar_window.title("Pesquisar Discos")
-        pesquisar_window.geometry("255x320")
+        pesquisar_window.geometry("320x250")
         
-        pesquisar_label = ttk.Label(master=pesquisar_window, text='Pesquisar Por:')
-        pesquisar_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
-        
-        tipo_pesquisa = tk.StringVar()
-        artista = ttk.Radiobutton(master=pesquisar_window, text="Artista", variable=tipo_pesquisa, value="Artista")
-        artista.grid(row=1, column=1)
-        titulo = ttk.Radiobutton(master=pesquisar_window, text="Título", variable=tipo_pesquisa, value="Título")
-        titulo.grid(row=1, column=2)
-        
+        pesquisa_label = ttk.Label(master=pesquisar_window, text='Buscar por: ')
+        pesquisa_label.grid(row=1, column=0, padx=4, pady=4, sticky='W')
+
         pesquisa = tk.StringVar()
         pesquisa_entry = ttk.Entry(master=pesquisar_window, textvariable=pesquisa)
-        pesquisa_entry.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
+        pesquisa_entry.grid(row=2, column=0, padx=4, pady=4)
+
+        criterio = tk.StringVar()
+        artistaRb = ttk.Radiobutton(master=pesquisar_window, text="Artista", variable=criterio, value="Artista")
+        artistaRb.grid(row=1, column=1, columnspan=2)
+        discoRb = ttk.Radiobutton(master=pesquisar_window, text="Disco", variable=criterio, value="Disco")
+        discoRb.grid(row=1, column=3, columnspan=2)
+
+        lista_discos = tk.Listbox(master=pesquisar_window, selectmode="single", bg="#a7f5a4", width=40)
+        lista_discos.grid(row=4, column=0, padx=4, pady=4)
         
-        pesquisar_button = tk.Button(master=pesquisar_window, text="Pesquisar", width=30, height=1)
-        pesquisar_button.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
-        """Esse botão pesquisar vai executar a query por artista ou titulo, conforme a escolha do radio button"""
+        def alimentaLista(criterio, pesquisa):
+            lista_discos.delete(0, 'end')
+            if criterio == "Disco":
+                query = self.controller_disco.ctBuscarPorTitulo(pesquisa)
+            else:
+                query = self.controller_disco.ctBuscarPorArtista(pesquisa)
+            for disco in query:
+                lista_discos.insert('end', disco)
+
+        buscar_button = tk.Button(master=pesquisar_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(criterio.get(), pesquisa.get()))
+        buscar_button.grid(row=3, column=0, padx=4, pady=4)
         
-        lista = tk.Listbox(master=pesquisar_window, selectmode="single", bg="#a7f5a4", width=40)#listvariable=LISTA_SQL
-        lista.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
-        
-        """for item in query:
-               lista.insert(END,item)"""
     
     #PESQUISAR TODAS AS MUSICAS DO CANTOR X
     #PESQUISAR TODAS AS MUSICAS CUJO NOME SEJA Y, MOSTRAR NOME E INTREPRETE NUMA LISTA. A QUE FOR SELECIONADA NESSA LISTA ABRE TODAS AS INFORMAÇÕES

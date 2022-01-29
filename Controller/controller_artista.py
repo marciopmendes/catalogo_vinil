@@ -23,3 +23,7 @@ class artistaCt:
     
     def ctAlterarArtista(self, artistaId, artistaNome):
         self.artista_model.alterarArtista(artistaId, artistaNome)
+
+    def listaArtistas(self):
+        lista = self.artista_model.listaArtistas()
+        return lista

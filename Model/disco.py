@@ -1,8 +1,11 @@
-class Disco():
+import MySQLdb
+from Model.dbconnect import db
 
-    def __init__(self, titulo, artista, genero, ano, gravadora, musicas=None, numero_disco, qualidade, estado_capa, estado_midia):
+class discoMd(db):
+
+    def __init__(self, titulo="", artistaId=0, genero="", ano=0, gravadora="", numero_disco=0, qualidade="", estado_capa="", estado_midia=""):
         self.titulo = titulo
-        self.artista = artista #não vai ser um atributo, vai ser um objeto Artista
+        self.artistaId = artistaId #não vai ser um atributo, vai ser um ID
         self.genero = genero
         self.ano = ano
         self.gravadora = gravadora
@@ -15,8 +18,8 @@ class Disco():
         return self.titulo
 
 
-    def get_artista(self):
-        return self.artista
+    def get_artistaId(self):
+        return self.artistaId
 
 
     def get_genero(self):
@@ -51,8 +54,8 @@ class Disco():
         self.titulo = value
 
 
-    def set_artista(self, value):
-        self.artista = value
+    def set_artistaId(self, value):
+        self.artistaId = value
 
 
     def set_genero(self, value):
@@ -82,3 +85,40 @@ class Disco():
     def set_estado_midia(self, value):
         self.estado_midia = value
 
+    def cadastrarDisco(self, titulo, artistaId, genero, ano, gravadora, numero, qualidade, capa, midia):
+        disco = discoMd(titulo, artistaId, genero, ano, gravadora, numero, qualidade, capa, midia)
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = f"""INSERT INTO disco_tbl (disco_titulo, artista_id, disco_genero, disco_ano, disco_gravadora, disco_numero, disco_qualidade,
+                                        disco_estado_capa, disco_estado_midia) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        cursor.execute(sql, [disco.get_titulo(), disco.get_artistaId(), disco.get_genero(), disco.get_ano(), disco.get_gravadora(), disco.get_numero_disco(), disco.get_qualidade(), disco.get_estado_capa(), disco.get_estado_midia()])
+        database.commit()
+        database.close()
+
+    def buscarPorTitulo(self, titulo):
+        lista = []
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = f"""SELECT disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+                ON disco_tbl.artista_id = artista_tbl.artista_id WHERE disco_titulo LIKE '%{titulo}%'"""
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        for tupla in result:
+            lista.append(f"Título: {tupla[0]}, Artista: {tupla[3]}, Ano: {tupla[1]}, Número do disco: {tupla[2]}")
+        database.commit()
+        database.close()
+        return lista
+
+    def buscarPorArtista(self, artista):
+        lista = []
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = f"""SELECT disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+                ON disco_tbl.artista_id = artista_tbl.artista_id WHERE artista_nome LIKE '%{artista}%'"""
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        for tupla in result:
+            lista.append(f"Título: {tupla[0]}, Artista: {tupla[3]}, Ano: {tupla[1]}, Número do disco: {tupla[2]}")
+        database.commit()
+        database.close()
+        return lista

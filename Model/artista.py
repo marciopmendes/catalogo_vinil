@@ -63,3 +63,16 @@ class artistaMd(db):
             cursor.execute(sql, [artista_id])
             database.commit()
         database.close()
+
+    def listaArtistas(self):
+        lista = []
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = "SELECT artista_nome FROM artista_tbl ORDER BY artista_nome ASC"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        database.commit()
+        database.close()
+        for tupla in result:
+            lista.append(tupla[0])
+        return lista

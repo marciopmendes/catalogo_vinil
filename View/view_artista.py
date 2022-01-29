@@ -55,7 +55,6 @@ class artistaVw:
         buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
         
         def alterarArtistaForm(id_artista):
-            print(id_artista)
             artista_window = tk.Toplevel()
             artista_window.title("Informações do Artista")
             artista_window.geometry("230x80")
