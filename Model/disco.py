@@ -99,12 +99,12 @@ class discoMd(db):
         lista = []
         database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
         cursor = database.cursor()
-        sql = f"""SELECT disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+        sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
                 ON disco_tbl.artista_id = artista_tbl.artista_id WHERE disco_titulo LIKE '%{titulo}%'"""
         cursor.execute(sql)
         result = cursor.fetchall()
         for tupla in result:
-            lista.append(f"Título: {tupla[0]}, Artista: {tupla[3]}, Ano: {tupla[1]}, Número do disco: {tupla[2]}")
+            lista.append(f"ID: {tupla[0]} Título: {tupla[1]}, Artista: {tupla[4]}, Ano: {tupla[2]}, Número do disco: {tupla[3]}")
         database.commit()
         database.close()
         return lista
@@ -113,12 +113,29 @@ class discoMd(db):
         lista = []
         database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
         cursor = database.cursor()
-        sql = f"""SELECT disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+        sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
                 ON disco_tbl.artista_id = artista_tbl.artista_id WHERE artista_nome LIKE '%{artista}%'"""
         cursor.execute(sql)
         result = cursor.fetchall()
         for tupla in result:
-            lista.append(f"Título: {tupla[0]}, Artista: {tupla[3]}, Ano: {tupla[1]}, Número do disco: {tupla[2]}")
+            lista.append(f"ID: {tupla[0]} Título: {tupla[1]}, Artista: {tupla[4]}, Ano: {tupla[2]}, Número do disco: {tupla[3]}")
         database.commit()
         database.close()
         return lista
+
+    def alterarDisco(self, idDoDisco, titulo, artistaId, genero, ano, gravadora, numero, qualidade, estado_capa, estado_midia):
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = f"""UPDATE disco_tbl SET disco_titulo=%s, artista_id=%s, disco_genero=%s, disco_ano=%s, disco_gravadora=%s, disco_numero=%s, disco_qualidade=%s, 
+        disco_estado_capa=%s, disco_estado_midia=%s WHERE disco_id=%s"""
+        cursor.execute(sql, [titulo, artistaId, genero, ano, gravadora, numero, qualidade, estado_capa, estado_midia, idDoDisco])
+        database.commit()
+        database.close()
+
+    def excluirDisco(self, idDisco):
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = "DELETE FROM disco_tbl WHERE disco_id=%s"
+        cursor.execute(sql, [idDisco])
+        database.commit()
+        database.close()

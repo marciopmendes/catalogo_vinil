@@ -28,3 +28,9 @@ class discoCt:
     def ctBuscarPorArtista(self, artista):
         lista = self.disco_model.buscarPorArtista(artista)
         return lista
+
+    def ctAlterarDisco(self, idDoDisco, titulo, artistaId, genero, ano, gravadora, numero, qualidade, estado_capa, estado_midia):
+        self.disco_model.alterarDisco(idDoDisco, titulo, artistaId, genero, ano, gravadora, numero, qualidade, estado_capa, estado_midia)
+
+    def ctExcluirDisco(self, idDisco):
+        self.disco_model.excluirDisco(idDisco)
