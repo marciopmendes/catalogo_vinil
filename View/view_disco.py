@@ -27,7 +27,7 @@ class discoVw:
         artista_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
         lista_artistas = self.controller_disco.listaArtistas()
         artista = tk.StringVar()
-        artista_combo = ttk.Combobox(master=cadastro_disco_window, values=lista_artistas, textvariable=artista)
+        artista_combo = ttk.Combobox(master=cadastro_disco_window, values=lista_artistas, textvariable=artista, state="readonly")
         artista_combo.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
         
         genero_label = ttk.Label(master=cadastro_disco_window, text='Gênero')
@@ -71,14 +71,14 @@ class discoVw:
         estado_capa_label.grid(row=8, column=0, padx=4, pady=4, columnspan=1)
         estado_capa = tk.StringVar()
         estado_capa_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
-                                        textvariable=estado_capa)
+                                        textvariable=estado_capa, state="readonly")
         estado_capa_combo.grid(row=8, column=1, padx=4, pady=4, columnspan=3)
         
         estado_midia_label = ttk.Label(master=cadastro_disco_window, text="Estado da Mídia")
         estado_midia_label.grid(row=9, column=0, padx=4, pady=4, columnspan=1)
         estado_midia = tk.StringVar()
         estado_midia_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
-                                         textvariable=estado_midia)
+                                         textvariable=estado_midia, state="readonly")
         estado_midia_combo.grid(row=9, column=1, padx=4, pady=4, columnspan=3)
 
         def saveDisco(_titulo, _artista, _genero, _ano, _gravadora, _numero, _qualidade, _capa, _midia):
@@ -115,6 +115,7 @@ class discoVw:
         
         def alimentaLista(criterio, pesquisa):
             lista_discos.delete(0, 'end')
+            lista_discos.insert('end', "ID-Titulo-Artista-Ano-Numero do Disco")
             if criterio == "Disco":
                 query = self.controller_disco.ctBuscarPorTitulo(pesquisa)
             else:
@@ -125,13 +126,12 @@ class discoVw:
         buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(criterio.get(), pesquisa.get()))
         buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
 
-        id_disco = tk.IntVar()
-        id_disco_label = ttk.Label(master = alterar_window, text='Digite o ID do disco que deseja alterar: ')
-        id_disco_label.grid(row=4, column=0, padx=4, pady=4)
-        id_disco_entry = ttk.Entry(master=alterar_window, textvariable=id_disco)
-        id_disco_entry.grid(row=4, column=1, padx=4, pady=4, columnspan=2)
+        def get_ID():
+            str_id = lista_discos.get(lista_discos.curselection())
+            id_disco = int(str_id.split("-", 1)[0])
+            return id_disco
      
-        alterar_button = tk.Button(master=alterar_window, text="Alterar Disco Selecionado", width=30, height=1, command=lambda:alterarDiscoForm(id_disco.get()))
+        alterar_button = tk.Button(master=alterar_window, text="Alterar Disco Selecionado", width=30, height=1, command=lambda:alterarDiscoForm(get_ID()))
         alterar_button.grid(row=5, column=0, padx=4, pady=4, columnspan=4)
         
         """o botão alterar acima vai executar uma função chamando o formulário abaixo"""
@@ -194,13 +194,13 @@ class discoVw:
             estado_capa = tk.StringVar()
             estado_capa_label = ttk.Label(master=disco_window, text="Estado da Capa")
             estado_capa_label.grid(row=8, column=0, padx=4, pady=4, columnspan=1)
-            estado_capa_combo = ttk.Combobox(master=disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"], textvariable=estado_capa)
+            estado_capa_combo = ttk.Combobox(master=disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"], textvariable=estado_capa, state="readonly")
             estado_capa_combo.grid(row=8, column=1, padx=4, pady=4, columnspan=3)
             
             estado_midia = tk.StringVar()
             estado_midia_label = ttk.Label(master=disco_window, text="Estado da Mídia")
             estado_midia_label.grid(row=9, column=0, padx=4, pady=4, columnspan=1)
-            estado_midia_combo = ttk.Combobox(master=disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"], textvariable=estado_midia)
+            estado_midia_combo = ttk.Combobox(master=disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"], textvariable=estado_midia, state="readonly")
             estado_midia_combo.grid(row=9, column=1, padx=4, pady=4, columnspan=3)
 
             def salvarAlteracoes():
@@ -279,15 +279,14 @@ class discoVw:
         lista = tk.Listbox(master=excluir_window, selectmode="multiple", bg="#a7f5a4", width=40)
         lista.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
 
-        id_disco = tk.IntVar()
-        id_disco_label = ttk.Label(master = excluir_window, text='Digite o ID do disco que deseja excluir: ')
-        id_disco_label.grid(row=5, column=0, padx=4, pady=4)
-        id_disco_entry = ttk.Entry(master=excluir_window, textvariable=id_disco)
-        id_disco_entry.grid(row=5, column=1, padx=4, pady=4, columnspan=2)
+        def get_ID():
+            str_id = lista.get(lista.curselection())
+            id_disco = int(str_id.split("-", 1)[0])
+            return id_disco
         
         def excluir(idDisco):
             self.controller_disco.ctExcluirDisco(idDisco)
             excluir_window.destroy()
 
-        excluir_button = tk.Button(master=excluir_window, text="Excluir", width=30, height=1, command=lambda:excluir(id_disco.get()))
+        excluir_button = tk.Button(master=excluir_window, text="Excluir", width=30, height=1, command=lambda:excluir(get_ID()))
         excluir_button.grid(row=6, column=0, padx=4, pady=4, columnspan=4)

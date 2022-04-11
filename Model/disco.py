@@ -99,12 +99,16 @@ class discoMd(db):
         lista = []
         database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
         cursor = database.cursor()
-        sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
-                ON disco_tbl.artista_id = artista_tbl.artista_id WHERE disco_titulo LIKE '%{titulo}%'"""
+        if titulo == "":
+            sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+                                ON disco_tbl.artista_id = artista_tbl.artista_id"""
+        else:
+            sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+                    ON disco_tbl.artista_id = artista_tbl.artista_id WHERE disco_titulo LIKE '%{titulo}%'"""
         cursor.execute(sql)
         result = cursor.fetchall()
         for tupla in result:
-            lista.append(f"ID: {tupla[0]} Título: {tupla[1]}, Artista: {tupla[4]}, Ano: {tupla[2]}, Número do disco: {tupla[3]}")
+            lista.append(f"{tupla[0]}-{tupla[1]}-{tupla[4]}-{tupla[2]}-{tupla[3]}")
         database.commit()
         database.close()
         return lista
@@ -113,12 +117,16 @@ class discoMd(db):
         lista = []
         database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
         cursor = database.cursor()
-        sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
-                ON disco_tbl.artista_id = artista_tbl.artista_id WHERE artista_nome LIKE '%{artista}%'"""
+        if artista == "":
+            sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+                    ON disco_tbl.artista_id = artista_tbl.artista_id"""
+        else:
+            sql = f"""SELECT disco_id, disco_titulo, disco_ano, disco_numero, artista_nome FROM disco_tbl INNER JOIN artista_tbl
+                                ON disco_tbl.artista_id = artista_tbl.artista_id WHERE artista_nome LIKE '%{artista}%'"""
         cursor.execute(sql)
         result = cursor.fetchall()
         for tupla in result:
-            lista.append(f"ID: {tupla[0]} Título: {tupla[1]}, Artista: {tupla[4]}, Ano: {tupla[2]}, Número do disco: {tupla[3]}")
+            lista.append(f"{tupla[0]}-{tupla[1]}-{tupla[4]}-{tupla[2]}-{tupla[3]}")
         database.commit()
         database.close()
         return lista

@@ -88,7 +88,7 @@ class mainVw:
         excluir_musica_button.grid(row=12, column=0, padx=4, pady=4, columnspan=3)
     
     def sairButton(self):
-        sair_button = tk.Button(master=self.main_window, text="Sair", width=30, height=1, command=self.main_window.destroy)
+        sair_button = tk.Button(master=self.main_window, text="Sair", width=30, height=1, command=self.main_window.destroy, bg="red")
         sair_button.grid(row=13, column=0, padx=4, pady=4, columnspan=3)
 
 #Instrução para rodar o código

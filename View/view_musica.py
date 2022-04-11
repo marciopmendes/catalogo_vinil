@@ -11,7 +11,7 @@ class musicaVw:
         cadastro_musica_window.title("Cadastro de Músicas")
         cadastro_musica_window.geometry("255x360")
         
-        lista_musicas = list()
+        lista_musicas = []
         
         #Criação do formulário de cadastro
         titulo_label = ttk.Label(master=cadastro_musica_window, text='Título da Música')

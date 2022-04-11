@@ -25,7 +25,10 @@ class artistaMd(db):
         lista = []
         database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
         cursor = database.cursor()
-        sql = f"SELECT artista_nome FROM artista_tbl WHERE artista_nome LIKE '%{nome}%'"
+        if nome == "":
+            sql = f"SELECT artista_nome FROM artista_tbl"
+        else:
+            sql = f"SELECT artista_nome FROM artista_tbl WHERE artista_nome LIKE '%{nome}%'"
         cursor.execute(sql)
         result = cursor.fetchall()
         for tupla in result:
