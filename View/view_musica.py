@@ -1,10 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 from Controller.controller_musica import musicaCt
+from Controller.controller_artista import artistaCt
+from Controller.controller_disco import discoCt
 
 class musicaVw:
     def __init__(self):
-        pass
+        self.controller_musica = musicaCt()
+        self.controller_artista = artistaCt()
+        self.controller_disco = discoCt()
     
     def cadastroMusica(self):
         cadastro_musica_window = tk.Toplevel()
@@ -23,43 +27,70 @@ class musicaVw:
         
         interprete_label = ttk.Label(master=cadastro_musica_window, text='Intérprete')
         interprete_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
-        """o campo abaixo vai ser uma ttk.combobox para escolher dentre os artistas cadastrados"""
-        interprete = "QUERY"  """ESSA VARIAVEL RECEBE A QUERY SELECT * FROM ARTISTAS_TBL"""
-        interprete_combo = ttk.Combobox(master=cadastro_musica_window, values=interprete)
+        interprete = tk.StringVar()
+
+        def trace_interprete_combo(*args):
+            interprete.set(interprete_combo.get())
+
+        interpretes = self.controller_artista.listaArtistas()  # lista com todos os artistas, ordem alfabética
+        interprete_combo = ttk.Combobox(master=cadastro_musica_window, values=interpretes, state='readonly')
         interprete_combo.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
+        interprete_combo.bind('<<ComboboxSelected>>', trace_interprete_combo)
+
+        def trace_interprete(*args):
+            disco_combo.set('')
+            discos = self.controller_disco.ctBuscarPorArtista(interprete.get())
+            disco_combo['values'] = discos
+
+        disco_label = ttk.Label(master=cadastro_musica_window, text='Disco')
+        disco_label.grid(row=3, column=0, padx=4, pady=4, columnspan=1)
+        interprete.trace_add('write', trace_interprete)
+        discos = self.controller_disco.ctBuscarPorArtista(lambda d: interprete.get())  # pegar os discos baseado no interprete selecionado
+        disco_combo = ttk.Combobox(master=cadastro_musica_window, values=discos, state='readonly')
+        disco_combo.grid(row=3, column=1, padx=4, pady=4, columnspan=3)
         
         compositor_label = ttk.Label(master=cadastro_musica_window, text='Compositor')
-        compositor_label.grid(row=3, column=0, padx=4, pady=4, columnspan=1)
+        compositor_label.grid(row=4, column=0, padx=4, pady=4, columnspan=1)
         
         compositor = tk.StringVar()
         compositor_entry = ttk.Entry(master=cadastro_musica_window, textvariable=compositor)
-        compositor_entry.grid(row=3, column=1, padx=4, pady=4, columnspan=3)
+        compositor_entry.grid(row=4, column=1, padx=4, pady=4, columnspan=3)
         
         genero_label = ttk.Label(master=cadastro_musica_window, text='Gênero')
-        genero_label.grid(row=4, column=0, padx=4, pady=4, columnspan=1)
+        genero_label.grid(row=5, column=0, padx=4, pady=4, columnspan=1)
         
         genero = tk.StringVar()
         genero_entry = ttk.Entry(master=cadastro_musica_window, textvariable=genero)
-        genero_entry.grid(row=4, column=1, padx=4, pady=4, columnspan=3)
+        genero_entry.grid(row=5, column=1, padx=4, pady=4, columnspan=3)
         
         lado_disco_label = ttk.Label(master=cadastro_musica_window, text='Lado do Disco')
-        lado_disco_label.grid(row=5, column=0, padx=4, pady=4, columnspan=1)
+        lado_disco_label.grid(row=6, column=0, padx=4, pady=4, columnspan=1)
         
         lado_disco = tk.StringVar()
         lado_disco_entry = ttk.Entry(master=cadastro_musica_window, textvariable=lado_disco)
-        lado_disco_entry.grid(row=5, column=1, padx=4, pady=4, columnspan=3)
-        
-        adicionar_button = tk.Button(master=cadastro_musica_window, text="Adicionar Música")
-        adicionar_button.grid(row=6, column=0, padx=4, pady=4, columnspan=2)
+        lado_disco_entry.grid(row=6, column=1, padx=4, pady=4, columnspan=3)
+
+        def adiciona_musica():
+            # LEMBRAR DE LIMPAR A LISTA_MUSICAS SE MUDAR O VALOR DA COMBOBOX DISCO
+            # ALIMENTAR A LISTBOX COM UMA QUERY DA TABELA MUSICA_DISCO_TBL BASEADO NO DISCO INNER JOIN MUSICA, BASEADO NO DISCO SELECIONADO
+            # O BOTAO DE ADICIONAR MUSICA INSERE A MUSICA NO BANCO, PRA GERAR O ID
+            # O BOTAO DE FINALIZAR O CADASTRO FAZ O INSERT NA TABELA MUSICA_DISCO_TBL CRUZANDO O ID DE CADA MUSICA NA LISTA COM O ID DO DISCO SELECIONADO
+            musicas_lb.delete(0, 'end')
+            lista_musicas.append({'nome': titulo.get(), 'compositor': compositor.get(), 'genero': genero.get(), 'lado': lado_disco.get()})
+            for musica in lista_musicas:
+                musicas_lb.insert('end', musica)
+
+        adicionar_button = tk.Button(master=cadastro_musica_window, text="Adicionar Música", command=adiciona_musica)
+        adicionar_button.grid(row=7, column=0, padx=4, pady=4, columnspan=2)
         """clicar no botão adicionar, faz um append na lista. essa lista alimenta uma listbox que aparece pro usuário
         saber qual ele já cadastrou"""
         
         finalizar_button = tk.Button(master=cadastro_musica_window, text="Finalizar Cadastro")
-        finalizar_button.grid(row=6, column=3, padx=4, pady=4, columnspan=2)
+        finalizar_button.grid(row=7, column=3, padx=4, pady=4, columnspan=2)
         """clicar no botão finalizar cadastro executa a query que linka as músicas com o disco"""
         
-        musicas_lb = tk.Listbox(master=cadastro_musica_window, bg="#a7f5a4", width=40, listvariable=lista_musicas)
-        musicas_lb.grid(row=7, column=0, padx=4, pady=4, columnspan=4)
+        musicas_lb = tk.Listbox(master=cadastro_musica_window, bg="#a7f5a4", width=40)
+        musicas_lb.grid(row=8, column=0, padx=4, pady=4, columnspan=4)
     
     def alterarMusica(self):
         alterar_window = tk.Toplevel()
