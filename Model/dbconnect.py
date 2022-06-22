@@ -95,7 +95,7 @@ class db:
           `musica_nome` VARCHAR(80) NOT NULL,
           `musica_compositor` VARCHAR(100) NOT NULL,
           `musica_genero` VARCHAR(30) NOT NULL,
-          `musica_lado_disco` VARCHAR(1) NOT NULL,
+          `musica_lado_disco` VARCHAR(5) NOT NULL,
           `artista_id` INT NOT NULL,
           PRIMARY KEY (`musica_id`, `artista_id`),
           UNIQUE INDEX `musica_id_UNIQUE` (`musica_id` ASC) VISIBLE,
