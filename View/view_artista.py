@@ -23,7 +23,8 @@ class artistaVw:
         artista_entry = ttk.Entry(master=cadastro_artista_window, textvariable=artista)
         artista_entry.grid(row=1, column=1, padx=4, pady=4)
         
-        salvar_button = tk.Button(master=cadastro_artista_window, text="Salvar", width=33, height=1, command=lambda:saveArtista(artista.get()))
+        salvar_button = tk.Button(master=cadastro_artista_window, text="Salvar", width=33, height=1,
+                                  command=lambda: saveArtista(artista.get()))
         salvar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=2)
         
     def alterarArtista(self):
@@ -51,7 +52,8 @@ class artistaVw:
             for artista in query:
                 lista_artistas.insert('end', artista)
                 
-        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(artista.get()))
+        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1,
+                                  command=lambda: alimentaLista(artista.get()))
         buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
         
         def alterarArtistaForm(id_artista):
@@ -66,10 +68,13 @@ class artistaVw:
             novo_artista_entry = ttk.Entry(master=artista_window, textvariable=novo_artista)
             novo_artista_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=3)
                        
-            salvar_button = tk.Button(master=artista_window, text="Salvar", width=30, height=1, command=lambda:self.controller_artista.ctAlterarArtista(id_artista, novo_artista.get()))
+            salvar_button = tk.Button(master=artista_window, text="Salvar", width=30, height=1,
+                                      command=lambda: self.controller_artista.ctAlterarArtista
+                                      (id_artista, novo_artista.get()))
             salvar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=3)
         
-        alterar_button = tk.Button(master=alterar_window, text="Alterar Artista Selecionado", width=30, height=1, command=lambda:alterarArtistaForm(getIdByName()))
+        alterar_button = tk.Button(master=alterar_window, text="Alterar Artista Selecionado", width=30, height=1,
+                                   command=lambda: alterarArtistaForm(getIdByName()))
         alterar_button.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
 
     def pesquisaArtista(self):
@@ -94,7 +99,8 @@ class artistaVw:
                 lista.insert('end', artista)
             artista_entry.delete(0, 'end')
                 
-        pesquisar_button = tk.Button(master=pesquisar_window, text="Pesquisar", width=30, height=1, command=lambda:alimentaLista(artista.get()))
+        pesquisar_button = tk.Button(master=pesquisar_window, text="Pesquisar", width=30, height=1,
+                                     command=lambda: alimentaLista(artista.get()))
         pesquisar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)  
      
     def excluirArtista(self):
@@ -118,7 +124,8 @@ class artistaVw:
             for artista in query:
                 lista.insert('end', artista)
                 
-        buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(artista.get()))
+        buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1,
+                                  command=lambda: alimentaLista(artista.get()))
         buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
         
         def getIdsToDelete():
@@ -129,5 +136,6 @@ class artistaVw:
                 lista_ids.append(id_artista) 
             return lista_ids
           
-        excluir_button = tk.Button(master=excluir_window, text="Excluir Artistas Selecionados", width=30, height=1, command=lambda:self.controller_artista.ctExcluirArtistas(getIdsToDelete()))
+        excluir_button = tk.Button(master=excluir_window, text="Excluir Artistas Selecionados", width=30, height=1,
+                                   command=lambda: self.controller_artista.ctExcluirArtistas(getIdsToDelete()))
         excluir_button.grid(row=4, column=0, padx=4, pady=4, columnspan=4)

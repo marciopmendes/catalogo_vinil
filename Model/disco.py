@@ -143,6 +143,9 @@ class discoMd(db):
     def excluirDisco(self, idDisco):
         database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
         cursor = database.cursor()
+        sql = "DELETE FROM musica_disco_tbl WHERE disco_tbl_disco_id=%s"
+        cursor.execute(sql, [idDisco])
+        database.commit()
         sql = "DELETE FROM disco_tbl WHERE disco_id=%s"
         cursor.execute(sql, [idDisco])
         database.commit()

@@ -71,14 +71,14 @@ class discoVw:
         estado_capa_label.grid(row=8, column=0, padx=4, pady=4, columnspan=1)
         estado_capa = tk.StringVar()
         estado_capa_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
-                                        textvariable=estado_capa, state="readonly")
+                                         textvariable=estado_capa, state="readonly")
         estado_capa_combo.grid(row=8, column=1, padx=4, pady=4, columnspan=3)
         
         estado_midia_label = ttk.Label(master=cadastro_disco_window, text="Estado da Mídia")
         estado_midia_label.grid(row=9, column=0, padx=4, pady=4, columnspan=1)
         estado_midia = tk.StringVar()
         estado_midia_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
-                                         textvariable=estado_midia, state="readonly")
+                                          textvariable=estado_midia, state="readonly")
         estado_midia_combo.grid(row=9, column=1, padx=4, pady=4, columnspan=3)
 
         def saveDisco(_titulo, _artista, _genero, _ano, _gravadora, _numero, _qualidade, _capa, _midia):
@@ -87,7 +87,7 @@ class discoVw:
             cadastro_disco_window.destroy()
         
         salvar_button = tk.Button(master=cadastro_disco_window, text="Salvar", width=40, height=1,
-                                 command=lambda:saveDisco(titulo.get(), artista.get(), genero.get(), ano.get(), gravadora.get(), numero.get(),
+                                  command=lambda:saveDisco(titulo.get(), artista.get(), genero.get(), ano.get(), gravadora.get(), numero.get(),
                                                          qualidade.get(), estado_capa.get(), estado_midia.get()))
         salvar_button.grid(row=10, column=0, padx=4, pady=4, columnspan=3)
         
@@ -123,7 +123,8 @@ class discoVw:
             for disco in query:
                 lista_discos.insert('end', disco)
 
-        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(criterio.get(), pesquisa.get()))
+        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1,
+                                  command=lambda: alimentaLista(criterio.get(), pesquisa.get()))
         buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
 
         def get_ID():
@@ -133,8 +134,7 @@ class discoVw:
      
         alterar_button = tk.Button(master=alterar_window, text="Alterar Disco Selecionado", width=30, height=1, command=lambda:alterarDiscoForm(get_ID()))
         alterar_button.grid(row=5, column=0, padx=4, pady=4, columnspan=4)
-        
-        """o botão alterar acima vai executar uma função chamando o formulário abaixo"""
+
         def alterarDiscoForm(idDoDisco):
             disco_window = tk.Toplevel()
             disco_window.title("Informações do Disco")
@@ -194,13 +194,17 @@ class discoVw:
             estado_capa = tk.StringVar()
             estado_capa_label = ttk.Label(master=disco_window, text="Estado da Capa")
             estado_capa_label.grid(row=8, column=0, padx=4, pady=4, columnspan=1)
-            estado_capa_combo = ttk.Combobox(master=disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"], textvariable=estado_capa, state="readonly")
+            estado_capa_combo = ttk.Combobox(master=disco_window,
+                                             values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
+                                             textvariable=estado_capa, state="readonly")
             estado_capa_combo.grid(row=8, column=1, padx=4, pady=4, columnspan=3)
             
             estado_midia = tk.StringVar()
             estado_midia_label = ttk.Label(master=disco_window, text="Estado da Mídia")
             estado_midia_label.grid(row=9, column=0, padx=4, pady=4, columnspan=1)
-            estado_midia_combo = ttk.Combobox(master=disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"], textvariable=estado_midia, state="readonly")
+            estado_midia_combo = ttk.Combobox(master=disco_window,
+                                              values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
+                                              textvariable=estado_midia, state="readonly")
             estado_midia_combo.grid(row=9, column=1, padx=4, pady=4, columnspan=3)
 
             def salvarAlteracoes():
@@ -242,7 +246,8 @@ class discoVw:
             for disco in query:
                 lista_discos.insert('end', disco)
 
-        buscar_button = tk.Button(master=pesquisar_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(criterio.get(), pesquisa.get()))
+        buscar_button = tk.Button(master=pesquisar_window, text="Buscar", width=30, height=1,
+                                  command=lambda: alimentaLista(criterio.get(), pesquisa.get()))
         buscar_button.grid(row=3, column=0, padx=4, pady=4)
     
     def excluirDisco(self):
@@ -267,7 +272,8 @@ class discoVw:
         pesquisa_entry = ttk.Entry(master=excluir_window, textvariable=pesquisa)
         pesquisa_entry.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
         
-        buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1, command=lambda:alimentaLista(criterio.get(), pesquisa.get()))
+        buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1,
+                                  command=lambda: alimentaLista(criterio.get(), pesquisa.get()))
         buscar_button.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
 
         criterio = tk.StringVar()
@@ -288,5 +294,6 @@ class discoVw:
             self.controller_disco.ctExcluirDisco(idDisco)
             excluir_window.destroy()
 
-        excluir_button = tk.Button(master=excluir_window, text="Excluir", width=30, height=1, command=lambda:excluir(get_ID()))
+        excluir_button = tk.Button(master=excluir_window, text="Excluir", width=30, height=1,
+                                   command=lambda: excluir(get_ID()))
         excluir_button.grid(row=6, column=0, padx=4, pady=4, columnspan=4)

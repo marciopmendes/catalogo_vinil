@@ -91,7 +91,7 @@ class mainVw:
         sair_button = tk.Button(master=self.main_window, text="Sair", width=30, height=1, command=self.main_window.destroy, bg="red")
         sair_button.grid(row=13, column=0, padx=4, pady=4, columnspan=3)
 
-#Instrução para rodar o código
+
 if __name__ == '__main__':
     app = mainVw()
     app.main_window.mainloop()

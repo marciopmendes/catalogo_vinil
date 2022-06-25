@@ -15,8 +15,6 @@ class musicaVw:
         cadastro_musica_window.title("Cadastro de Músicas")
         cadastro_musica_window.geometry("255x360")
         
-        # lista_musicas = []
-        
         #Criação do formulário de cadastro
         titulo_label = ttk.Label(master=cadastro_musica_window, text='Título da Música')
         titulo_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -104,7 +102,8 @@ class musicaVw:
         adicionar_button = tk.Button(master=cadastro_musica_window, text="Adicionar Música", command=adiciona_musica)
         adicionar_button.grid(row=7, column=0, padx=4, pady=4, columnspan=2)
         
-        finalizar_button = tk.Button(master=cadastro_musica_window, text="Finalizar Cadastro", command=cadastro_musica_window.destroy)
+        finalizar_button = tk.Button(master=cadastro_musica_window, text="Finalizar Cadastro",
+                                     command=cadastro_musica_window.destroy)
         finalizar_button.grid(row=7, column=3, padx=4, pady=4, columnspan=2)
         
         musicas_lb = tk.Listbox(master=cadastro_musica_window, bg="#a7f5a4", width=100)
@@ -122,25 +121,31 @@ class musicaVw:
         musica = tk.StringVar()
         musica_entry = ttk.Entry(master=alterar_window, textvariable=musica)
         musica_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=3)
-        
-        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1)
-        buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
-        
-        """O botão de buscar vai executar uma query. O resultado dessa query será usado para alimentar a listbox"""
-        
-        lista = tk.Listbox(master=alterar_window, selectmode="single", bg="#a7f5a4", width=40)#listvariable=LISTA_SQL
+
+        lista = tk.Listbox(master=alterar_window, selectmode="single", bg="#a7f5a4", width=40)
         lista.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
-        
-        """for item in query:
-               lista.insert(END,item)
-               
-            Os itens selecionados vão popular algo tipo uma lista que vai alimentar a query de alterar"""
-        
-        alterar_button = tk.Button(master=alterar_window, text="Alterar Música Selecionada", width=30, height=1)
+
+        def alimentaLista(_musica):
+            lista.delete(0, 'end')
+            query = self.controller_musica.ctBuscarPorTitulo(_musica)
+            for row in query:
+                lista.insert('end', row)
+
+        buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1,
+                                  command=lambda: alimentaLista(musica.get()))
+        buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
+
+        #SELECIONAR A MUSICA BASEADO NA SELECAO DO ITEM DA LISTBOX
+        def get_ID():
+            str_id = lista.get(lista.curselection())
+            id_musica = int(str_id.split("-", 1)[0])
+            return id_musica
+
+        alterar_button = tk.Button(master=alterar_window, text="Alterar Música Selecionada", width=30, height=1,
+                                   command=lambda: alterarMusicaForm(get_ID()))
         alterar_button.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
-        
-        """o botão alterar acima vai executar uma função chamando o formulário abaixo"""
-        def alterarMusicaForm(self):
+
+        def alterarMusicaForm(alteracaoID):
             musica_window = tk.Toplevel()
             musica_window.title("Informações da Música")
             musica_window.geometry("230x150")
@@ -151,38 +156,36 @@ class musicaVw:
             titulo = tk.StringVar()
             titulo_entry = ttk.Entry(master=musica_window, textvariable=titulo)
             titulo_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=3)
-            
-            interprete_label = ttk.Label(master=musica_window, text='Intérprete')
-            interprete_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
-            
-            interprete = tk.StringVar()
-            interprete_entry = ttk.Entry(master=musica_window, textvariable=interprete)
-            interprete_entry.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
-            
+
             compositor_label = ttk.Label(master=musica_window, text='Compositor')
-            compositor_label.grid(row=3, column=0, padx=4, pady=4, columnspan=1)
+            compositor_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
             
             compositor = tk.StringVar()
             compositor_entry = ttk.Entry(master=musica_window, textvariable=compositor)
-            compositor_entry.grid(row=3, column=1, padx=4, pady=4, columnspan=3)
+            compositor_entry.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
             
             genero_label = ttk.Label(master=musica_window, text='Gênero')
-            genero_label.grid(row=4, column=0, padx=4, pady=4, columnspan=1)
+            genero_label.grid(row=3, column=0, padx=4, pady=4, columnspan=1)
             
             genero = tk.StringVar()
             genero_entry = ttk.Entry(master=musica_window, textvariable=genero)
-            genero_entry.grid(row=4, column=1, padx=4, pady=4, columnspan=3)
+            genero_entry.grid(row=3, column=1, padx=4, pady=4, columnspan=3)
             
             lado_disco_label = ttk.Label(master=musica_window, text='Lado do Disco')
-            lado_disco_label.grid(row=5, column=0, padx=4, pady=4, columnspan=1)
+            lado_disco_label.grid(row=4, column=0, padx=4, pady=4, columnspan=1)
             
             lado_disco = tk.StringVar()
             lado_disco_entry = ttk.Entry(master=musica_window, textvariable=lado_disco)
-            lado_disco_entry.grid(row=5, column=1, padx=4, pady=4, columnspan=3)
-                
-            salvar_button = tk.Button(master=musica_window, text="Salvar", width=30, height=1)
+            lado_disco_entry.grid(row=4, column=1, padx=4, pady=4, columnspan=3)
+
+            def salvarAlteracoes():
+                self.controller_musica.ctAlterarMusica(alteracaoID, titulo.get(), compositor.get(),
+                                                       genero.get(), lado_disco.get())
+                musica_window.destroy()
+
+            salvar_button = tk.Button(master=musica_window, text="Salvar", width=30, height=1,
+                                      command=salvarAlteracoes)
             salvar_button.grid(row=10, column=0, padx=4, pady=4, columnspan=3)
-            """Esse botão vai executar uma query alterando a música selecionada na listbox"""
             
     def pesquisaMusica(self):
         pesquisar_window = tk.Toplevel()
@@ -215,36 +218,53 @@ class musicaVw:
                 lista.insert('end', musica)
         
         pesquisar_button = tk.Button(master=pesquisar_window, text="Pesquisar", width=30, height=1,
-                                     command=lambda: alimentaLista(tipo_pesquisa.get(),pesquisa.get()))
+                                     command=lambda: alimentaLista(tipo_pesquisa.get(), pesquisa.get()))
         pesquisar_button.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
     
     def excluirMusica(self):
         excluir_window = tk.Toplevel()
         excluir_window.title("Excluir Músicas")
         excluir_window.geometry("255x350")
-        
-        #Criação do formulário de exclusão
-        musica_label = ttk.Label(master=excluir_window, text='Nome da Música')
-        musica_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
-        
-        musica = tk.StringVar()
-        musica_entry = ttk.Entry(master=excluir_window, textvariable=musica)
-        musica_entry.grid(row=1, column=1, padx=4, pady=4, columnspan=3)
-        
-        buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1)
-        buscar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
-        
-        """O botão de buscar vai executar uma query. O resultado dessa query será usado para alimentar a listbox"""
-        
-        lista = tk.Listbox(master=excluir_window, selectmode="multiple", bg="#a7f5a4", width=40)#listvariable=LISTA_SQL
-        lista.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
-        
-        """for item in query:
-               lista.insert(END,item)
-               
-            Os itens selecionados vão popular algo tipo uma lista que vai alimentar a query de exclusão"""
-        
-        excluir_button = tk.Button(master=excluir_window, text="Excluir Itens Selecionados", width=30, height=1)
-        excluir_button.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
-        
+
+        def alimentaLista(criterio, pesquisa):
+            lista.delete(0, 'end')
+            if criterio == "Artista":
+                query = self.controller_musica.ctBuscarPorInterprete(pesquisa)
+            else:
+                query = self.controller_musica.ctBuscarPorTitulo(pesquisa)
+            for musica in query:
+                lista.insert('end', musica)
+
+        pesquisa_label = ttk.Label(master=excluir_window, text='Buscar por: ')
+        pesquisa_label.grid(row=1, column=0, padx=4, pady=4)
+
+        pesquisa = tk.StringVar()
+        pesquisa_entry = ttk.Entry(master=excluir_window, textvariable=pesquisa)
+        pesquisa_entry.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
+
+        buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1,
+                                  command=lambda: alimentaLista(criterio.get(), pesquisa.get()))
+        buscar_button.grid(row=3, column=0, padx=4, pady=4, columnspan=4)
+
+        criterio = tk.StringVar()
+        artistaRb = ttk.Radiobutton(master=excluir_window, text="Artista", variable=criterio, value="Artista")
+        artistaRb.grid(row=1, column=1)
+        tituloRb = ttk.Radiobutton(master=excluir_window, text="Titulo", variable=criterio, value="Titulo")
+        tituloRb.grid(row=1, column=2)
+
+        lista = tk.Listbox(master=excluir_window, selectmode="multiple", bg="#a7f5a4", width=40)
+        lista.grid(row=4, column=0, padx=4, pady=4, columnspan=4)
+
+        def get_ID():
+            str_id = lista.get(lista.curselection())
+            id_musica = int(str_id.split("-", 1)[0])
+            return id_musica
+
+        def excluir(idMusica):
+            self.controller_musica.ctExcluirMusica(idMusica)
+            excluir_window.destroy()
+
+        excluir_button = tk.Button(master=excluir_window, text="Excluir", width=30, height=1,
+                                   command=lambda: excluir(get_ID()))
+        excluir_button.grid(row=6, column=0, padx=4, pady=4, columnspan=4)
     

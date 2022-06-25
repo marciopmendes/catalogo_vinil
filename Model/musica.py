@@ -139,3 +139,23 @@ class musicaMd(db):
         database.commit()
         database.close()
         return lista
+
+    def AlterarMusica(self, alteracaoid, titulo, compositor, genero, lado_disco):
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = f"""UPDATE musica_tbl SET musica_nome=%s, musica_compositor=%s, musica_genero=%s,
+        musica_lado_disco=%s WHERE musica_id=%s"""
+        cursor.execute(sql, [titulo, compositor, genero, lado_disco, alteracaoid])
+        database.commit()
+        database.close()
+
+    def excluirMusica(self, idMusica):
+        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        cursor = database.cursor()
+        sql = "DELETE FROM musica_disco_tbl WHERE musica_tbl_musica_id=%s"
+        cursor.execute(sql, [idMusica])
+        database.commit()
+        sql = "DELETE FROM musica_tbl WHERE musica_id=%s"
+        cursor.execute(sql, [idMusica])
+        database.commit()
+        database.close()

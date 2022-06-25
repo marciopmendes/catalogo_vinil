@@ -28,3 +28,9 @@ class musicaCt:
     def ctBuscarPorInterprete(self, interprete):
         lista = self.musica_model.buscarPorInterprete(interprete)
         return lista
+
+    def ctAlterarMusica(self,alteracaoid, titulo, compositor, genero, lado_disco):
+        self.musica_model.AlterarMusica(alteracaoid, titulo, compositor, genero, lado_disco)
+
+    def ctExcluirMusica(self, idMusica):
+        self.musica_model.excluirMusica(idMusica)
