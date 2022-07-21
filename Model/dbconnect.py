@@ -1,13 +1,12 @@
 import MySQLdb
 
-class db:
-    banco_host = "localhost"
-    banco_username = "root"
-    banco_password = "rkv83wwv"
-    banco_nome = "mydb"
-    
-    def __init__(self):
-        pass
+
+class DatabaseMd:
+
+    banco_host = ""
+    banco_username = ""
+    banco_password = ""
+    banco_nome = ""
     
     def getHost(self):
         return self.banco_host
@@ -23,7 +22,7 @@ class db:
 
     def setHost(self, host):
         self.banco_host = host
-    
+
     def setUsername(self, username):
         self.banco_username = username
 
@@ -32,9 +31,10 @@ class db:
 
     def setNome(self, nome):
         self.banco_nome = nome
-        
-    def dbConnect(self):
-        db = MySQLdb.connect(self.banco_host, self.banco_username, self.banco_password, self.banco_nome)
+
+    @classmethod
+    def dbConnect(cls):
+        db = MySQLdb.connect(cls.banco_host, cls.banco_username, cls.banco_password, cls.banco_nome)
         cursor = db.cursor()
         sql = f"""
         SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
@@ -42,19 +42,19 @@ class db:
         SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
         
         -- -----------------------------------------------------
-        -- Schema {self.banco_nome}
+        -- Schema {cls.banco_nome}
         -- -----------------------------------------------------
         
         -- -----------------------------------------------------
-        -- Schema {self.banco_nome}
+        -- Schema {cls.banco_nome}
         -- -----------------------------------------------------
-        CREATE SCHEMA IF NOT EXISTS `{self.banco_nome}` DEFAULT CHARACTER SET utf8 ;
-        USE `{self.banco_nome}` ;
+        CREATE SCHEMA IF NOT EXISTS `{cls.banco_nome}` DEFAULT CHARACTER SET utf8 ;
+        USE `{cls.banco_nome}` ;
         
         -- -----------------------------------------------------
-        -- Table `{self.banco_nome}`.`artista_tbl`
+        -- Table `{cls.banco_nome}`.`artista_tbl`
         -- -----------------------------------------------------
-        CREATE TABLE IF NOT EXISTS `{self.banco_nome}`.`artista_tbl` (
+        CREATE TABLE IF NOT EXISTS `{cls.banco_nome}`.`artista_tbl` (
           `artista_id` INT NOT NULL AUTO_INCREMENT,
           `artista_nome` VARCHAR(100) NOT NULL,
           PRIMARY KEY (`artista_id`),
@@ -63,9 +63,9 @@ class db:
         
         
         -- -----------------------------------------------------
-        -- Table `{self.banco_nome}`.`disco_tbl`
+        -- Table `{cls.banco_nome}`.`disco_tbl`
         -- -----------------------------------------------------
-        CREATE TABLE IF NOT EXISTS `{self.banco_nome}`.`disco_tbl` (
+        CREATE TABLE IF NOT EXISTS `{cls.banco_nome}`.`disco_tbl` (
           `disco_id` INT NOT NULL AUTO_INCREMENT,
           `disco_titulo` VARCHAR(80) NOT NULL,
           `disco_genero` VARCHAR(30) NOT NULL,
@@ -81,16 +81,16 @@ class db:
           INDEX `fk_disco_tbl_artista1_idx` (`artista_id` ASC) VISIBLE,
           CONSTRAINT `fk_disco_tbl_artista1`
             FOREIGN KEY (`artista_id`)
-            REFERENCES `{self.banco_nome}`.`artista_tbl` (`artista_id`)
+            REFERENCES `{cls.banco_nome}`.`artista_tbl` (`artista_id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION)
         ENGINE = InnoDB;
         
         
         -- -----------------------------------------------------
-        -- Table `{self.banco_nome}`.`musica_tbl`
+        -- Table `{cls.banco_nome}`.`musica_tbl`
         -- -----------------------------------------------------
-        CREATE TABLE IF NOT EXISTS `{self.banco_nome}`.`musica_tbl` (
+        CREATE TABLE IF NOT EXISTS `{cls.banco_nome}`.`musica_tbl` (
           `musica_id` INT NOT NULL AUTO_INCREMENT,
           `musica_nome` VARCHAR(80) NOT NULL,
           `musica_compositor` VARCHAR(100) NOT NULL,
@@ -102,16 +102,16 @@ class db:
           INDEX `fk_musica_tbl_artista1_idx` (`artista_id` ASC) VISIBLE,
           CONSTRAINT `fk_musica_tbl_artista1`
             FOREIGN KEY (`artista_id`)
-            REFERENCES `{self.banco_nome}`.`artista_tbl` (`artista_id`)
+            REFERENCES `{cls.banco_nome}`.`artista_tbl` (`artista_id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION)
         ENGINE = InnoDB;
         
         
         -- -----------------------------------------------------
-        -- Table `{self.banco_nome}`.`musica_disco_tbl`
+        -- Table `{cls.banco_nome}`.`musica_disco_tbl`
         -- -----------------------------------------------------
-        CREATE TABLE IF NOT EXISTS `{self.banco_nome}`.`musica_disco_tbl` (
+        CREATE TABLE IF NOT EXISTS `{cls.banco_nome}`.`musica_disco_tbl` (
           `disco_tbl_disco_id` INT NOT NULL,
           `musica_tbl_musica_id` INT NOT NULL,
           PRIMARY KEY (`disco_tbl_disco_id`, `musica_tbl_musica_id`),
@@ -119,12 +119,12 @@ class db:
           INDEX `fk_disco_tbl_has_musica_tbl_disco_tbl_idx` (`disco_tbl_disco_id` ASC) VISIBLE,
           CONSTRAINT `fk_disco_tbl_has_musica_tbl_disco_tbl`
             FOREIGN KEY (`disco_tbl_disco_id`)
-            REFERENCES `{self.banco_nome}`.`disco_tbl` (`disco_id`)
+            REFERENCES `{cls.banco_nome}`.`disco_tbl` (`disco_id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION,
           CONSTRAINT `fk_disco_tbl_has_musica_tbl_musica_tbl1`
             FOREIGN KEY (`musica_tbl_musica_id`)
-            REFERENCES `{self.banco_nome}`.`musica_tbl` (`musica_id`)
+            REFERENCES `{cls.banco_nome}`.`musica_tbl` (`musica_id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION)
         ENGINE = InnoDB;

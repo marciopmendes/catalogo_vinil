@@ -1,8 +1,8 @@
 import MySQLdb
-from Model.dbconnect import db
+from Model.dbconnect import DatabaseMd
 
 
-class musicaMd(db):
+class MusicaMd(DatabaseMd):
 
     def __init__(self, nome="", compositor="", genero="", lado_disco="", artista_id=""):
         self.nome = nome
@@ -35,9 +35,10 @@ class musicaMd(db):
     def get_lado_disco(self):
         return self.lado_disco
 
-    def musicas_from_disco(self, idDisco):
+    def musicas_from_disco(self, id_disco):
         lista = []
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = """SELECT m.musica_nome, m.musica_compositor, m.musica_genero, m.musica_lado_disco
                 FROM musica_tbl m
@@ -46,7 +47,7 @@ class musicaMd(db):
                 INNER JOIN disco_tbl d
                 ON d.disco_id = md.disco_tbl_disco_id
                 WHERE d.disco_id = %s"""
-        cursor.execute(sql, (idDisco,))
+        cursor.execute(sql, (id_disco,))
         result = cursor.fetchall()
         for tupla in result:
             lista.append(f"{tupla[0]}-{tupla[1]}-{tupla[2]}-{tupla[3]}")
@@ -54,9 +55,10 @@ class musicaMd(db):
         database.close()
         return lista
 
-    def musicas_id_from_disco(self, idDisco):
+    def musicas_id_from_disco(self, id_disco):
         lista = []
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = """SELECT m.musica_id
                 FROM musica_tbl m
@@ -65,7 +67,7 @@ class musicaMd(db):
                 INNER JOIN disco_tbl d
                 ON d.disco_id = md.disco_tbl_disco_id
                 WHERE d.disco_id = %s"""
-        cursor.execute(sql, (idDisco,))
+        cursor.execute(sql, (id_disco,))
         result = cursor.fetchall()
         for tupla in result:
             lista.append(f"{tupla[0]}-{tupla[1]}-{tupla[2]}-{tupla[3]}")
@@ -74,17 +76,20 @@ class musicaMd(db):
         return lista
 
     def cadastrarMusica(self, nome, compositor, genero, lado_disco, artista_id):
-        musica = musicaMd(nome, compositor, genero, lado_disco, artista_id)
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        musica = MusicaMd(nome, compositor, genero, lado_disco, artista_id)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = f"""INSERT INTO musica_tbl (musica_nome, musica_compositor, musica_genero,
                 musica_lado_disco, artista_id) VALUES (%s,%s,%s,%s,%s)"""
-        cursor.execute(sql, (musica.get_nome(), musica.get_compositor(), musica.get_genero(), musica.get_lado_disco(), musica.artista_id))
+        cursor.execute(sql, (musica.get_nome(), musica.get_compositor(), musica.get_genero(), musica.get_lado_disco(),
+                             musica.artista_id))
         database.commit()
         database.close()
 
     def nova_musica_id(self, nome, compositor, genero, lado_disco, artista_id):
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = """SELECT m.musica_id
                 FROM musica_tbl m
@@ -97,7 +102,8 @@ class musicaMd(db):
         return result[0]
 
     def musica_disco_insert(self, id_nova_musica, id_disco):
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = f"""INSERT INTO musica_disco_tbl (musica_tbl_musica_id, disco_tbl_disco_id) VALUES (%s,%s)"""
         cursor.execute(sql, (id_nova_musica, id_disco))
@@ -106,14 +112,16 @@ class musicaMd(db):
 
     def buscarPorTitulo(self, titulo):
         lista = []
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         if titulo == "":
-            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome FROM musica_tbl INNER JOIN artista_tbl
-                                            ON musica_tbl.artista_id = artista_tbl.artista_id"""
+            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome
+             FROM musica_tbl INNER JOIN artista_tbl ON musica_tbl.artista_id = artista_tbl.artista_id"""
         else:
-            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome FROM musica_tbl INNER JOIN artista_tbl
-                                            ON musica_tbl.artista_id = artista_tbl.artista_id WHERE musica_nome LIKE '%{titulo}%'"""
+            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome
+             FROM musica_tbl INNER JOIN artista_tbl ON musica_tbl.artista_id = artista_tbl.artista_id WHERE
+              musica_nome LIKE '%{titulo}%'"""
         cursor.execute(sql)
         result = cursor.fetchall()
         for tupla in result:
@@ -124,14 +132,16 @@ class musicaMd(db):
 
     def buscarPorInterprete(self, interprete):
         lista = []
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         if interprete == "":
-            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome FROM musica_tbl INNER JOIN artista_tbl
-                                                        ON musica_tbl.artista_id = artista_tbl.artista_id"""
+            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome
+             FROM musica_tbl INNER JOIN artista_tbl ON musica_tbl.artista_id = artista_tbl.artista_id"""
         else:
-            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome FROM musica_tbl INNER JOIN artista_tbl
-                                                        ON musica_tbl.artista_id = artista_tbl.artista_id WHERE artista_nome LIKE '%{interprete}%'"""
+            sql = f"""SELECT musica_id, musica_nome, musica_compositor, musica_genero, musica_lado_disco, artista_nome
+             FROM musica_tbl INNER JOIN artista_tbl ON musica_tbl.artista_id = artista_tbl.artista_id
+              WHERE artista_nome LIKE '%{interprete}%'"""
         cursor.execute(sql)
         result = cursor.fetchall()
         for tupla in result:
@@ -141,7 +151,8 @@ class musicaMd(db):
         return lista
 
     def AlterarMusica(self, alteracaoid, titulo, compositor, genero, lado_disco):
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = f"""UPDATE musica_tbl SET musica_nome=%s, musica_compositor=%s, musica_genero=%s,
         musica_lado_disco=%s WHERE musica_id=%s"""
@@ -149,13 +160,14 @@ class musicaMd(db):
         database.commit()
         database.close()
 
-    def excluirMusica(self, idMusica):
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+    def excluirMusica(self, id_musica):
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = "DELETE FROM musica_disco_tbl WHERE musica_tbl_musica_id=%s"
-        cursor.execute(sql, [idMusica])
+        cursor.execute(sql, [id_musica])
         database.commit()
         sql = "DELETE FROM musica_tbl WHERE musica_id=%s"
-        cursor.execute(sql, [idMusica])
+        cursor.execute(sql, [id_musica])
         database.commit()
         database.close()

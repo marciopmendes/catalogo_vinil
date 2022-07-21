@@ -1,8 +1,9 @@
-from Model.artista import artistaMd
+from Model.artista import ArtistaMd
 
-class artistaCt:
+
+class ArtistaCt:
     
-    artista_model = artistaMd()
+    artista_model = ArtistaMd()
     
     def __init__(self):
         pass
@@ -15,14 +16,14 @@ class artistaCt:
         return lista
     
     def ctCapturaId(self, nome):
-        artistaId = self.artista_model.capturaId(nome)
-        return artistaId
+        artista_id = self.artista_model.capturaId(nome)
+        return artista_id
     
-    def ctExcluirArtistas(self, listaIds):
-        self.artista_model.excluirArtistas(listaIds)
+    def ctExcluirArtistas(self, lista_ids):
+        self.artista_model.excluirArtistas(lista_ids)
     
-    def ctAlterarArtista(self, artistaId, artistaNome):
-        self.artista_model.alterarArtista(artistaId, artistaNome)
+    def ctAlterarArtista(self, artista_id, artista_nome):
+        self.artista_model.alterarArtista(artista_id, artista_nome)
 
     def listaArtistas(self):
         lista = self.artista_model.listaArtistas()

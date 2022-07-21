@@ -1,16 +1,18 @@
 import tkinter as tk
 from tkinter import ttk
-from Controller.controller_artista import artistaCt
+from Controller.controller_artista import ArtistaCt
 
-class artistaVw:
+
+class ArtistaVw:
     
     def __init__(self):
-        self.controller_artista = artistaCt()
+        self.controller_artista = ArtistaCt()
     
     def cadastroArtista(self):
         cadastro_artista_window = tk.Toplevel()
         cadastro_artista_window.title("Cadastro de Artistas")
-        cadastro_artista_window.geometry("250x70")
+        cadastro_artista_window.geometry("500x100")
+        cadastro_artista_window.columnconfigure(1, weight=1)
         
         def saveArtista(nome):
             self.controller_artista.ctCadastrarArtista(nome)
@@ -21,16 +23,18 @@ class artistaVw:
         
         artista = tk.StringVar()
         artista_entry = ttk.Entry(master=cadastro_artista_window, textvariable=artista)
-        artista_entry.grid(row=1, column=1, padx=4, pady=4)
+        artista_entry.grid(row=1, column=1, padx=4, pady=4, sticky='nsew', columnspan=4)
         
         salvar_button = tk.Button(master=cadastro_artista_window, text="Salvar", width=33, height=1,
                                   command=lambda: saveArtista(artista.get()))
-        salvar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=2)
+        salvar_button.grid(row=2, column=0, padx=4, pady=4, columnspan=4)
         
     def alterarArtista(self):
         alterar_window = tk.Toplevel()
         alterar_window.title("Alterar Artista")
-        alterar_window.geometry("255x280")
+        alterar_window.geometry("500x300")
+        alterar_window.columnconfigure(0, weight=1)
+        alterar_window.columnconfigure(1, weight=1)
         
         artista_label = ttk.Label(master=alterar_window, text='Nome do Artista')
         artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -49,8 +53,8 @@ class artistaVw:
         def alimentaLista(nome):
             lista_artistas.delete(0, 'end')
             query = self.controller_artista.ctBuscarArtista(nome)
-            for artista in query:
-                lista_artistas.insert('end', artista)
+            for result in query:
+                lista_artistas.insert('end', result)
                 
         buscar_button = tk.Button(master=alterar_window, text="Buscar", width=30, height=1,
                                   command=lambda: alimentaLista(artista.get()))
@@ -59,10 +63,10 @@ class artistaVw:
         def alterarArtistaForm(id_artista):
             artista_window = tk.Toplevel()
             artista_window.title("Informações do Artista")
-            artista_window.geometry("230x80")
+            artista_window.geometry("500x500")
             
-            artista_label = ttk.Label(master=artista_window, text='Artista')
-            artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
+            alterar_artista_label = ttk.Label(master=artista_window, text='Artista')
+            alterar_artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
             
             novo_artista = tk.StringVar()
             novo_artista_entry = ttk.Entry(master=artista_window, textvariable=novo_artista)
@@ -80,7 +84,7 @@ class artistaVw:
     def pesquisaArtista(self):
         pesquisar_window = tk.Toplevel()
         pesquisar_window.title("Pesquisar Artistas")
-        pesquisar_window.geometry("255x250")
+        pesquisar_window.geometry("500x500")
         
         pesquisar_label = ttk.Label(master=pesquisar_window, text='Nome do Artista:')
         pesquisar_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -95,8 +99,8 @@ class artistaVw:
         def alimentaLista(nome):
             lista.delete(0, 'end')
             query = self.controller_artista.ctBuscarArtista(nome)
-            for artista in query:
-                lista.insert('end', artista)
+            for result in query:
+                lista.insert('end', result)
             artista_entry.delete(0, 'end')
                 
         pesquisar_button = tk.Button(master=pesquisar_window, text="Pesquisar", width=30, height=1,
@@ -106,7 +110,7 @@ class artistaVw:
     def excluirArtista(self):
         excluir_window = tk.Toplevel()
         excluir_window.title("Excluir Artistas")
-        excluir_window.geometry("255x320")
+        excluir_window.geometry("500x500")
         
         artista_label = ttk.Label(master=excluir_window, text='Nome do Artista')
         artista_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
@@ -121,8 +125,8 @@ class artistaVw:
         def alimentaLista(nome):
             lista.delete(0, 'end')
             query = self.controller_artista.ctBuscarArtista(nome)
-            for artista in query:
-                lista.insert('end', artista)
+            for result in query:
+                lista.insert('end', result)
                 
         buscar_button = tk.Button(master=excluir_window, text="Buscar", width=30, height=1,
                                   command=lambda: alimentaLista(artista.get()))

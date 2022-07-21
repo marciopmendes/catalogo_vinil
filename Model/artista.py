@@ -1,7 +1,8 @@
 import MySQLdb
-from Model.dbconnect import db
+from Model.dbconnect import DatabaseMd
 
-class artistaMd(db):
+
+class ArtistaMd(DatabaseMd):
     
     def __init__(self, nome=""):
         self.nome = nome
@@ -13,8 +14,9 @@ class artistaMd(db):
         self.nome = value
     
     def cadastrarArtista(self, nome):
-        artista = artistaMd(nome)
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        artista = ArtistaMd(nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = f"INSERT INTO artista_tbl (artista_nome) VALUES (%s)"
         cursor.execute(sql, [artista.get_nome()])
@@ -23,7 +25,8 @@ class artistaMd(db):
         
     def buscarArtista(self, nome):
         lista = []
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         if nome == "":
             sql = f"SELECT artista_nome FROM artista_tbl"
@@ -38,8 +41,9 @@ class artistaMd(db):
         return lista
     
     def capturaId(self, nome):
-        artista = artistaMd(nome)
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        artista = ArtistaMd(nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = f"SELECT artista_id FROM artista_tbl WHERE artista_nome=%s"
         cursor.execute(sql, [artista.get_nome()])
@@ -49,18 +53,20 @@ class artistaMd(db):
         artistaId = result[0]
         return artistaId
     
-    def alterarArtista(self, artistaId, artistaNome):
-        artista = artistaMd(artistaNome)
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+    def alterarArtista(self, artista_id, artista_nome):
+        artista = ArtistaMd(artista_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = f"UPDATE artista_tbl SET artista_nome=%s WHERE artista_id=%s"
-        cursor.execute(sql, [artista.get_nome(), artistaId])
+        cursor.execute(sql, [artista.get_nome(), artista_id])
         database.commit()
         database.close()
         
-    def excluirArtistas(self, listaIds):
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
-        for artista_id in listaIds:
+    def excluirArtistas(self, lista_ids):
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
+        for artista_id in lista_ids:
             cursor = database.cursor()
             sql = f"DELETE FROM artista_tbl WHERE artista_id=%s"
             cursor.execute(sql, [artista_id])
@@ -69,7 +75,8 @@ class artistaMd(db):
 
     def listaArtistas(self):
         lista = []
-        database = MySQLdb.connect(db.banco_host, db.banco_username, db.banco_password, db.banco_nome)
+        database = MySQLdb.connect(DatabaseMd.banco_host, DatabaseMd.banco_username, DatabaseMd.banco_password,
+                                   DatabaseMd.banco_nome)
         cursor = database.cursor()
         sql = "SELECT artista_nome FROM artista_tbl ORDER BY artista_nome ASC"
         cursor.execute(sql)

@@ -1,15 +1,14 @@
-from Model.musica import musicaMd
-#controller musicas
+from Model.musica import MusicaMd
 
-class musicaCt:
-    musica_model = musicaMd()
+
+class MusicaCt:
+    musica_model = MusicaMd()
 
     def __init__(self):
         pass
 
-
-    def ct_musicas_from_disco(self, idDisco):
-        lista = self.musica_model.musicas_from_disco(idDisco)
+    def ct_musicas_from_disco(self, id_disco):
+        lista = self.musica_model.musicas_from_disco(id_disco)
         return lista
 
     def ctCadastrarMusica(self, nome, compositor, genero, lado_disco, artista_id):
@@ -29,8 +28,8 @@ class musicaCt:
         lista = self.musica_model.buscarPorInterprete(interprete)
         return lista
 
-    def ctAlterarMusica(self,alteracaoid, titulo, compositor, genero, lado_disco):
+    def ctAlterarMusica(self, alteracaoid, titulo, compositor, genero, lado_disco):
         self.musica_model.AlterarMusica(alteracaoid, titulo, compositor, genero, lado_disco)
 
-    def ctExcluirMusica(self, idMusica):
-        self.musica_model.excluirMusica(idMusica)
+    def ctExcluirMusica(self, id_musica):
+        self.musica_model.excluirMusica(id_musica)

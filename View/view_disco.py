@@ -2,20 +2,20 @@ import sys
 sys.path.append("./")
 import tkinter as tk
 from tkinter import ttk
-from Controller.controller_disco import discoCt
-from Controller.controller_artista import artistaCt
+from Controller.controller_disco import DiscoCt
+from Controller.controller_artista import ArtistaCt
 
-class discoVw:
+
+class DiscoVw:
     def __init__(self):
-        self.controller_disco = discoCt()
-        self.controller_artista = artistaCt()
+        self.controller_disco = DiscoCt()
+        self.controller_artista = ArtistaCt()
         
     def cadastroDisco(self):
         cadastro_disco_window = tk.Toplevel()
         cadastro_disco_window.title("Cadastro de Discos")
         cadastro_disco_window.geometry("300x300")
-        
-        #Criação do formulário de cadastro
+
         titulo_label = ttk.Label(master=cadastro_disco_window, text='Título do Disco')
         titulo_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
         
@@ -27,7 +27,8 @@ class discoVw:
         artista_label.grid(row=2, column=0, padx=4, pady=4, columnspan=1)
         lista_artistas = self.controller_disco.listaArtistas()
         artista = tk.StringVar()
-        artista_combo = ttk.Combobox(master=cadastro_disco_window, values=lista_artistas, textvariable=artista, state="readonly")
+        artista_combo = ttk.Combobox(master=cadastro_disco_window, values=lista_artistas, textvariable=artista,
+                                     state="readonly")
         artista_combo.grid(row=2, column=1, padx=4, pady=4, columnspan=3)
         
         genero_label = ttk.Label(master=cadastro_disco_window, text='Gênero')
@@ -70,33 +71,36 @@ class discoVw:
         estado_capa_label = ttk.Label(master=cadastro_disco_window, text="Estado da Capa")
         estado_capa_label.grid(row=8, column=0, padx=4, pady=4, columnspan=1)
         estado_capa = tk.StringVar()
-        estado_capa_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
+        estado_capa_combo = ttk.Combobox(master=cadastro_disco_window,
+                                         values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
                                          textvariable=estado_capa, state="readonly")
         estado_capa_combo.grid(row=8, column=1, padx=4, pady=4, columnspan=3)
         
         estado_midia_label = ttk.Label(master=cadastro_disco_window, text="Estado da Mídia")
         estado_midia_label.grid(row=9, column=0, padx=4, pady=4, columnspan=1)
         estado_midia = tk.StringVar()
-        estado_midia_combo = ttk.Combobox(master=cadastro_disco_window, values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
+        estado_midia_combo = ttk.Combobox(master=cadastro_disco_window,
+                                          values=["M", "NM", "VG+/E", "VG", "G/G+/VG-", "P/F", "SA/SS"],
                                           textvariable=estado_midia, state="readonly")
         estado_midia_combo.grid(row=9, column=1, padx=4, pady=4, columnspan=3)
 
         def saveDisco(_titulo, _artista, _genero, _ano, _gravadora, _numero, _qualidade, _capa, _midia):
             id_artista = self.controller_disco.getArtistaById(_artista)
-            self.controller_disco.ctCadastrarDisco(_titulo, id_artista, _genero, _ano, _gravadora, _numero, _qualidade, _capa, _midia)
+            self.controller_disco.ctCadastrarDisco(_titulo, id_artista, _genero, _ano, _gravadora, _numero, _qualidade,
+                                                   _capa, _midia)
             cadastro_disco_window.destroy()
         
         salvar_button = tk.Button(master=cadastro_disco_window, text="Salvar", width=40, height=1,
-                                  command=lambda:saveDisco(titulo.get(), artista.get(), genero.get(), ano.get(), gravadora.get(), numero.get(),
-                                                         qualidade.get(), estado_capa.get(), estado_midia.get()))
+                                  command=lambda: saveDisco(titulo.get(), artista.get(), genero.get(), ano.get(),
+                                                            gravadora.get(), numero.get(),
+                                                            qualidade.get(), estado_capa.get(), estado_midia.get()))
         salvar_button.grid(row=10, column=0, padx=4, pady=4, columnspan=3)
         
     def alterarDisco(self):
         alterar_window = tk.Toplevel()
         alterar_window.title("Alterar Disco")
         alterar_window.geometry("255x350")
-        
-        #Criação do formulário de alteração
+
         pesquisa_label = ttk.Label(master=alterar_window, text='Buscar por: ')
         pesquisa_label.grid(row=1, column=0, padx=4, pady=4, columnspan=1)
 
@@ -113,13 +117,13 @@ class discoVw:
         lista_discos = tk.Listbox(master=alterar_window, selectmode="single", bg="#a7f5a4", width=100)
         lista_discos.grid(row=3, column=0, padx=4, pady=4, columnspan=5)
         
-        def alimentaLista(criterio, pesquisa):
+        def alimentaLista(_criterio, _pesquisa):
             lista_discos.delete(0, 'end')
             lista_discos.insert('end', "ID-Titulo-Artista-Ano-Numero do Disco")
-            if criterio == "Disco":
-                query = self.controller_disco.ctBuscarPorTitulo(pesquisa)
+            if _criterio == "Disco":
+                query = self.controller_disco.ctBuscarPorTitulo(_pesquisa)
             else:
-                query = self.controller_disco.ctBuscarPorArtista(pesquisa)
+                query = self.controller_disco.ctBuscarPorArtista(_pesquisa)
             for disco in query:
                 lista_discos.insert('end', disco)
 
@@ -132,10 +136,11 @@ class discoVw:
             id_disco = int(str_id.split("-", 1)[0])
             return id_disco
      
-        alterar_button = tk.Button(master=alterar_window, text="Alterar Disco Selecionado", width=30, height=1, command=lambda:alterarDiscoForm(get_ID()))
+        alterar_button = tk.Button(master=alterar_window, text="Alterar Disco Selecionado", width=30, height=1,
+                                   command=lambda: alterarDiscoForm(get_ID()))
         alterar_button.grid(row=5, column=0, padx=4, pady=4, columnspan=4)
 
-        def alterarDiscoForm(idDoDisco):
+        def alterarDiscoForm(id_do_disco):
             disco_window = tk.Toplevel()
             disco_window.title("Informações do Disco")
             disco_window.geometry("230x150")
@@ -209,7 +214,8 @@ class discoVw:
 
             def salvarAlteracoes():
                 artistaId = self.controller_artista.ctCapturaId(artista.get())
-                self.controller_disco.ctAlterarDisco(idDoDisco, titulo.get(), artistaId, genero.get(), ano.get(), gravadora.get(), numero.get(), qualidade.get(), 
+                self.controller_disco.ctAlterarDisco(id_do_disco, titulo.get(), artistaId, genero.get(), ano.get(),
+                                                     gravadora.get(), numero.get(), qualidade.get(),
                                                      estado_capa.get(), estado_midia.get())
                 disco_window.destroy()
             
@@ -237,12 +243,12 @@ class discoVw:
         lista_discos = tk.Listbox(master=pesquisar_window, selectmode="single", bg="#a7f5a4", width=40)
         lista_discos.grid(row=4, column=0, padx=4, pady=4)
         
-        def alimentaLista(criterio, pesquisa):
+        def alimentaLista(_criterio, _pesquisa):
             lista_discos.delete(0, 'end')
-            if criterio == "Disco":
-                query = self.controller_disco.ctBuscarPorTitulo(pesquisa)
+            if _criterio == "Disco":
+                query = self.controller_disco.ctBuscarPorTitulo(_pesquisa)
             else:
-                query = self.controller_disco.ctBuscarPorArtista(pesquisa)
+                query = self.controller_disco.ctBuscarPorArtista(_pesquisa)
             for disco in query:
                 lista_discos.insert('end', disco)
 
@@ -255,16 +261,15 @@ class discoVw:
         excluir_window.title("Excluir Discos")
         excluir_window.geometry("255x320")
 
-        def alimentaLista(criterio, pesquisa):
+        def alimentaLista(_criterio, _pesquisa):
             lista.delete(0, 'end')
-            if criterio == "Disco":
-                query = self.controller_disco.ctBuscarPorTitulo(pesquisa)
+            if _criterio == "Disco":
+                query = self.controller_disco.ctBuscarPorTitulo(_pesquisa)
             else:
-                query = self.controller_disco.ctBuscarPorArtista(pesquisa)
+                query = self.controller_disco.ctBuscarPorArtista(_pesquisa)
             for disco in query:
                 lista.insert('end', disco)
-        
-        #Criação do formulário de exclusão
+
         pesquisa_label = ttk.Label(master=excluir_window, text='Buscar por: ')
         pesquisa_label.grid(row=1, column=0, padx=4, pady=4)
         
@@ -290,8 +295,8 @@ class discoVw:
             id_disco = int(str_id.split("-", 1)[0])
             return id_disco
         
-        def excluir(idDisco):
-            self.controller_disco.ctExcluirDisco(idDisco)
+        def excluir(id_disco):
+            self.controller_disco.ctExcluirDisco(id_disco)
             excluir_window.destroy()
 
         excluir_button = tk.Button(master=excluir_window, text="Excluir", width=30, height=1,
